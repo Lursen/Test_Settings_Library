@@ -1,0 +1,3 @@
+[submodule "dynamiclayouts/settings_library"]
+	path = dynamiclayouts/settings_library
+	url = https://github.com/Lursen/Settings_Library
