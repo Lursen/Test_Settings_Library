@@ -70,7 +70,7 @@ class Dialog : public QDialog
 
 public:
     Dialog(QWidget *parent = 0);
-
+    ~Dialog();
 private slots:
     void buttonsOrientationChanged(int index);
     void rotateWidgets();

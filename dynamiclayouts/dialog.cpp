@@ -49,8 +49,10 @@
 ****************************************************************************/
 
 #include <QtWidgets>
-
+#include <iostream>
 #include "dialog.h"
+#include <stdio.h>
+#include "vector"
 
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
@@ -70,9 +72,97 @@ Dialog::Dialog(QWidget *parent)
     setWindowTitle(tr("Dynamic Layouts"));
 
     Settings st("test.db");
-    st.upd_value("1","Size","Value", "555");
+
+    this->setObjectName("MainWidget");
+    rotatableGroupBox->setObjectName("RotatableWindow");
+    optionsGroupBox->setObjectName("OptionsWindow");
+    buttonBox->setObjectName("ButtonWindow");
+
+    // Load main widgets
+    std::vector<std::string> mainSize, rotSize, optSize, butSize;
+
+    mainSize.resize(4);
+    rotSize.resize(4);
+    optSize.resize(4);
+    butSize.resize(4);
+
+    st.load_value("MainWindow", "Lenght", "Value", mainSize[0]);
+    st.load_value("MainWindow", "Width", "Value", mainSize[1]);
+    st.load_value("MainWindow", "Y", "Value", mainSize[2]);
+    st.load_value("MainWindow", "X", "Value", mainSize[3]);
+
+    st.load_value("RotatableWindow", "Lenght", "Value", rotSize[0]);
+    st.load_value("RotatableWindow", "Width", "Value", rotSize[1]);
+    st.load_value("RotatableWindow", "Y", "Value", rotSize[2]);
+    st.load_value("RotatableWindow", "X", "Value", rotSize[3]);
+
+    st.load_value("OptionsWindow", "Lenght", "Value", optSize[0]);
+    st.load_value("OptionsWindow", "Width", "Value", optSize[1]);
+    st.load_value("OptionsWindow", "Y", "Value", optSize[2]);
+    st.load_value("OptionsWindow", "X", "Value", optSize[3]);
+
+    st.load_value("ButtonWindow", "Lenght", "Value", butSize[0]);
+    st.load_value("ButtonWindow", "Width", "Value", butSize[1]);
+    st.load_value("ButtonWindow", "Y", "Value", butSize[2]);
+    st.load_value("ButtonWindow", "X", "Value", butSize[3]);
+
+    QRect mainRect (std::stoi(mainSize[3]),std::stoi(mainSize[2]),std::stoi(mainSize[1]),std::stoi(mainSize[0]) );
+    QRect rotRect  (std::stoi(rotSize[3]),std::stoi(rotSize[2]),std::stoi(rotSize[1]),std::stoi(rotSize[0]) );
+    QRect optRect  (std::stoi(optSize[3]),std::stoi(optSize[2]),std::stoi(optSize[1]),std::stoi(optSize[0]) );
+    QRect butRect  (std::stoi(butSize[3]),std::stoi(butSize[2]),std::stoi(butSize[1]),std::stoi(butSize[0]) );
+
+    this->setGeometry(mainRect);
+    rotatableGroupBox->setGeometry(rotRect);
+    optionsGroupBox->setGeometry(optRect);
+    buttonBox->setGeometry(butRect);
+
+    // Load subwidgets
+    rotatableWidgets[3]->setObjectName("SpinBox");
+    rotatableWidgets[2]->setObjectName("Slider");
+    rotatableWidgets[1]->setObjectName("Dial");
+    rotatableWidgets[0]->setObjectName("Bar");
+
+    std::string sb, sl, dl, br;
+
+    st.load_value("RotatableWindow", "SpinBox Value", "Value", sb);
+    st.load_value("RotatableWindow", "Slider Value", "Value", sl);
+    st.load_value("RotatableWindow", "Dial Value", "Value", dl);
+    st.load_value("RotatableWindow", "Bar Value", "Value", sb);
+
+    buttonsOrientationComboBox->setObjectName("OrientationBox");
+    std::string dataIndex;
+    st.load_value("OptionsWindow", "OrientationBox Value", "Value", dataIndex);
+    buttonsOrientationComboBox-> setCurrentIndex(std::stoi(dataIndex));
+}
+
+Dialog::~Dialog()
+{
+    Settings st("test.db");
+    // Update main widgets
+    st.upd_value("MainWindow", "Lenght", "Value", std::to_string(this->height()));
+    st.upd_value("MainWindow", "Width", "Value", std::to_string(this->width()));
+    st.upd_value("MainWindow", "X", "Value", std::to_string(this->x()));
+    st.upd_value("MainWindow", "Y", "Value", std::to_string(this->y()));
+
+    st.upd_value("RotatableWindow", "Lenght", "Value", std::to_string(rotatableGroupBox->height()));
+    st.upd_value("RotatableWindow", "Width", "Value", std::to_string(rotatableGroupBox->width()));
+    st.upd_value("RotatableWindow", "X", "Value", std::to_string(rotatableGroupBox->x()));
+    st.upd_value("RotatableWindow", "Y", "Value", std::to_string(rotatableGroupBox->y()));
+
+    st.upd_value("OptionsWindow", "Lenght", "Value", std::to_string(optionsGroupBox->height()));
+    st.upd_value("OptionsWindow", "Width", "Value", std::to_string(optionsGroupBox->width()));
+    st.upd_value("OptionsWindow", "X", "Value", std::to_string(optionsGroupBox->x()));
+    st.upd_value("OptionsWindow", "Y", "Value", std::to_string(optionsGroupBox->y()));
+
+    st.upd_value("ButtonWindow", "Lenght", "Value", std::to_string(buttonBox->height()));
+    st.upd_value("ButtonWindow", "Width", "Value", std::to_string(buttonBox->width()));
+    st.upd_value("ButtonWindow", "X", "Value", std::to_string(buttonBox->x()));
+    st.upd_value("ButtonWindow", "Y", "Value", std::to_string(buttonBox->y()));
+
+    st.upd_value("OptionsWindow", "OrientationBox Value", "Value", std::to_string(buttonsOrientationComboBox->currentIndex()));
 
 }
+
 
 void Dialog::buttonsOrientationChanged(int index)
 {
