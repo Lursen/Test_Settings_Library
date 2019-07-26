@@ -80,6 +80,7 @@ private:
     void createRotatableGroupBox();
     void createOptionsGroupBox();
     void createButtonBox();
+    int rotationNumber;
 
     QGroupBox *rotatableGroupBox;
     QQueue<QWidget *> rotatableWidgets;

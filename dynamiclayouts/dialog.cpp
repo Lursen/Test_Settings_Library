@@ -127,7 +127,19 @@ Dialog::Dialog(QWidget *parent)
     st.load_value("RotatableWindow", "SpinBox Value", "Value", sb);
     st.load_value("RotatableWindow", "Slider Value", "Value", sl);
     st.load_value("RotatableWindow", "Dial Value", "Value", dl);
-    st.load_value("RotatableWindow", "Bar Value", "Value", sb);
+    st.load_value("RotatableWindow", "Bar Value", "Value", br);
+
+    static_cast<QSlider*>(rotatableWidgets[1])->setValue(std::stoi(sl));
+
+    std::string rnStr;
+    st.load_value("RotatableWindow", "Rotation Number", "Value", rnStr);
+
+    rotationNumber = 0;
+
+    for (int i = 0; i < std::stoi(rnStr); i++)
+    {
+        rotateWidgets();
+    }
 
     buttonsOrientationComboBox->setObjectName("OrientationBox");
     std::string dataIndex;
@@ -138,7 +150,9 @@ Dialog::Dialog(QWidget *parent)
 Dialog::~Dialog()
 {
     Settings st("test.db");
+
     // Update main widgets
+
     st.upd_value("MainWindow", "Lenght", "Value", std::to_string(this->height()));
     st.upd_value("MainWindow", "Width", "Value", std::to_string(this->width()));
     st.upd_value("MainWindow", "X", "Value", std::to_string(this->x()));
@@ -159,8 +173,16 @@ Dialog::~Dialog()
     st.upd_value("ButtonWindow", "X", "Value", std::to_string(buttonBox->x()));
     st.upd_value("ButtonWindow", "Y", "Value", std::to_string(buttonBox->y()));
 
-    st.upd_value("OptionsWindow", "OrientationBox Value", "Value", std::to_string(buttonsOrientationComboBox->currentIndex()));
+    // Update subwidgets
 
+    st.upd_value("RotatableWindow", "Bar Value", "Value", std::to_string(static_cast<QProgressBar*>(rotatableWidgets[3])->value()));
+    st.upd_value("RotatableWindow", "Dial Value", "Value", std::to_string(static_cast<QDial*>(rotatableWidgets[2])->value()));
+    st.upd_value("RotatableWindow", "Slider Value", "Value", std::to_string(static_cast<QSlider*>(rotatableWidgets[1])->value()));
+    st.upd_value("RotatableWindow", "SpinBox Value", "Value", std::to_string(static_cast<QSpinBox*>(rotatableWidgets[0])->value()));
+
+    st.upd_value("RotatableWindow", "Rotation Number", "Value", std::to_string(rotationNumber));
+
+    st.upd_value("OptionsWindow", "OrientationBox Value", "Value", std::to_string(buttonsOrientationComboBox->currentIndex()));
 }
 
 
@@ -208,6 +230,9 @@ void Dialog::rotateWidgets()
         rotatableLayout->addWidget(rotatableWidgets[n - i - 1], 0, i);
         rotatableLayout->addWidget(rotatableWidgets[i], 1, i);
     }
+
+    rotationNumber = (rotationNumber + 1) % 4;
+
 }
 
 void Dialog::help()
