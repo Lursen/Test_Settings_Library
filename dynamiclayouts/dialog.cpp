@@ -71,7 +71,7 @@ Dialog::Dialog(QWidget *parent)
 
     setWindowTitle(tr("Dynamic Layouts"));
 
-    Settings st("test.db");
+    Settings st("WidgetSettings.db");
 
     this->setObjectName("MainWidget");
     rotatableGroupBox->setObjectName("RotatableWindow");
@@ -86,6 +86,7 @@ Dialog::Dialog(QWidget *parent)
     optSize.resize(4);
     butSize.resize(4);
 
+    st.start_tr();
     st.load_value("MainWindow", "Lenght", "Value", mainSize[0]);
     st.load_value("MainWindow", "Width", "Value", mainSize[1]);
     st.load_value("MainWindow", "Y", "Value", mainSize[2]);
@@ -105,6 +106,7 @@ Dialog::Dialog(QWidget *parent)
     st.load_value("ButtonWindow", "Width", "Value", butSize[1]);
     st.load_value("ButtonWindow", "Y", "Value", butSize[2]);
     st.load_value("ButtonWindow", "X", "Value", butSize[3]);
+    st.end_tr();
 
     QRect mainRect (std::stoi(mainSize[3]),std::stoi(mainSize[2]),std::stoi(mainSize[1]),std::stoi(mainSize[0]) );
     QRect rotRect  (std::stoi(rotSize[3]),std::stoi(rotSize[2]),std::stoi(rotSize[1]),std::stoi(rotSize[0]) );
@@ -124,10 +126,12 @@ Dialog::Dialog(QWidget *parent)
 
     std::string sb, sl, dl, br;
 
+    st.start_tr();
     st.load_value("RotatableWindow", "SpinBox Value", "Value", sb);
     st.load_value("RotatableWindow", "Slider Value", "Value", sl);
     st.load_value("RotatableWindow", "Dial Value", "Value", dl);
     st.load_value("RotatableWindow", "Bar Value", "Value", br);
+    st.end_tr();
 
     static_cast<QSlider*>(rotatableWidgets[1])->setValue(std::stoi(sl));
 
@@ -149,36 +153,38 @@ Dialog::Dialog(QWidget *parent)
 
 Dialog::~Dialog()
 {
-    Settings st("test.db");
+    Settings st("WidgetSettings.db");
 
     // Update main widgets
-
+    st.start_tr();
     st.upd_value("MainWindow", "Lenght", "Value", std::to_string(this->height()));
     st.upd_value("MainWindow", "Width", "Value", std::to_string(this->width()));
-    st.upd_value("MainWindow", "X", "Value", std::to_string(this->x()));
-    st.upd_value("MainWindow", "Y", "Value", std::to_string(this->y()));
+    st.upd_value("MainWindow", "X", "Value", std::to_string(this->geometry().x()));
+    st.upd_value("MainWindow", "Y", "Value", std::to_string(this->geometry().y()));
 
     st.upd_value("RotatableWindow", "Lenght", "Value", std::to_string(rotatableGroupBox->height()));
     st.upd_value("RotatableWindow", "Width", "Value", std::to_string(rotatableGroupBox->width()));
-    st.upd_value("RotatableWindow", "X", "Value", std::to_string(rotatableGroupBox->x()));
-    st.upd_value("RotatableWindow", "Y", "Value", std::to_string(rotatableGroupBox->y()));
+    st.upd_value("RotatableWindow", "X", "Value", std::to_string(rotatableGroupBox->geometry().x()));
+    st.upd_value("RotatableWindow", "Y", "Value", std::to_string(rotatableGroupBox->geometry().y()));
 
     st.upd_value("OptionsWindow", "Lenght", "Value", std::to_string(optionsGroupBox->height()));
     st.upd_value("OptionsWindow", "Width", "Value", std::to_string(optionsGroupBox->width()));
-    st.upd_value("OptionsWindow", "X", "Value", std::to_string(optionsGroupBox->x()));
-    st.upd_value("OptionsWindow", "Y", "Value", std::to_string(optionsGroupBox->y()));
+    st.upd_value("OptionsWindow", "X", "Value", std::to_string(optionsGroupBox->geometry().x()));
+    st.upd_value("OptionsWindow", "Y", "Value", std::to_string(optionsGroupBox->geometry().y()));
 
     st.upd_value("ButtonWindow", "Lenght", "Value", std::to_string(buttonBox->height()));
     st.upd_value("ButtonWindow", "Width", "Value", std::to_string(buttonBox->width()));
-    st.upd_value("ButtonWindow", "X", "Value", std::to_string(buttonBox->x()));
-    st.upd_value("ButtonWindow", "Y", "Value", std::to_string(buttonBox->y()));
+    st.upd_value("ButtonWindow", "X", "Value", std::to_string(buttonBox->geometry().x()));
+    st.upd_value("ButtonWindow", "Y", "Value", std::to_string(buttonBox->geometry().y()));
+    st.end_tr();
 
     // Update subwidgets
-
+    st.start_tr();
     st.upd_value("RotatableWindow", "Bar Value", "Value", std::to_string(static_cast<QProgressBar*>(rotatableWidgets[3])->value()));
     st.upd_value("RotatableWindow", "Dial Value", "Value", std::to_string(static_cast<QDial*>(rotatableWidgets[2])->value()));
     st.upd_value("RotatableWindow", "Slider Value", "Value", std::to_string(static_cast<QSlider*>(rotatableWidgets[1])->value()));
     st.upd_value("RotatableWindow", "SpinBox Value", "Value", std::to_string(static_cast<QSpinBox*>(rotatableWidgets[0])->value()));
+    st.end_tr();
 
     st.upd_value("RotatableWindow", "Rotation Number", "Value", std::to_string(rotationNumber));
 
