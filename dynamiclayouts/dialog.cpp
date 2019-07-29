@@ -115,6 +115,12 @@ Dialog::Dialog(QWidget *parent)
     st.end_tr();
 
     // Load main widgets
+
+    buttonsOrientationComboBox->setObjectName("OrientationBox");
+    std::string dataIndex;
+    st.load_value("OptionsWindow", "OrientationBox Value", "Value", dataIndex);
+    buttonsOrientationComboBox-> setCurrentIndex(std::stoi(dataIndex));
+
     std::vector<std::string> mainSize, rotSize, optSize, butSize;
 
     mainSize.resize(4);
@@ -180,11 +186,6 @@ Dialog::Dialog(QWidget *parent)
     {
         rotateWidgets();
     }
-
-    buttonsOrientationComboBox->setObjectName("OrientationBox");
-    std::string dataIndex;
-    st.load_value("OptionsWindow", "OrientationBox Value", "Value", dataIndex);
-    buttonsOrientationComboBox-> setCurrentIndex(std::stoi(dataIndex));
 }
 
 Dialog::~Dialog()
