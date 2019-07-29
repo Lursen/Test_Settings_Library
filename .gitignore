@@ -2,3 +2,11 @@ Makefile
 Makefile.Debug
 Makefile.Release
 .qmake.stash
+database.o
+dialog.o
+main.o
+moc_dialog.o
+result.o
+settings.o
+sqlite3.o
+statement.o
