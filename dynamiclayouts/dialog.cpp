@@ -78,6 +78,42 @@ Dialog::Dialog(QWidget *parent)
     optionsGroupBox->setObjectName("OptionsWindow");
     buttonBox->setObjectName("ButtonWindow");
 
+    // Create table
+    st.create_database();
+
+    st.start_tr();
+    st.insert_data("MainWindow", "Lenght", "0", "1");
+    st.insert_data("MainWindow", "Width", "0", "1");
+    st.insert_data("MainWindow", "X", "0", "1");
+    st.insert_data("MainWindow", "Y", "0", "1");
+
+    st.insert_data("ButtonWindow", "Lenght", "0", "1");
+    st.insert_data("ButtonWindow", "Width", "0", "1");
+    st.insert_data("ButtonWindow", "X", "0", "1");
+    st.insert_data("ButtonWindow", "Y", "0", "1");
+    st.insert_data("ButtonWindow", "Parent", "MainWindow", "3");
+
+    st.insert_data("OptionsWindow", "Lenght", "0", "1");
+    st.insert_data("OptionsWindow", "Width", "0", "1");
+    st.insert_data("OptionsWindow", "X", "0", "1");
+    st.insert_data("OptionsWindow", "Y", "0", "1");
+    st.insert_data("OptionsWindow", "Parent", "MainWindow", "3");
+    st.insert_data("OptionsWindow", "OrientationBox Value", "0", "1");
+
+    st.insert_data("RotatableWindow", "Lenght", "0", "1");
+    st.insert_data("RotatableWindow", "Width", "0", "1");
+    st.insert_data("RotatableWindow", "X", "0", "1");
+    st.insert_data("RotatableWindow", "Y", "0", "1");
+    st.insert_data("RotatableWindow", "Parent", "MainWindow", "3");
+
+    st.insert_data("RotatableWindow", "Bar Value", "0", "1");
+    st.insert_data("RotatableWindow", "Dial Value", "0", "1");
+    st.insert_data("RotatableWindow", "Slider Value", "0", "1");
+    st.insert_data("RotatableWindow", "SpinBox Value", "0", "1");
+
+    st.insert_data("RotatableWindow", "Rotation Number", "0", "1");
+    st.end_tr();
+
     // Load main widgets
     std::vector<std::string> mainSize, rotSize, optSize, butSize;
 
