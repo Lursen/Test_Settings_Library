@@ -175,10 +175,17 @@ Dialog::Dialog(QWidget *parent)
     st.load_value("RotatableWindow", "Bar Value", "Value", br);
     st.end_tr();
 
-    static_cast<QSlider*>(rotatableWidgets[1])->setValue(std::stoi(sl));
-
     std::string rnStr;
     st.load_value("RotatableWindow", "Rotation Number", "Value", rnStr);
+
+    if(std::stoi(rnStr) == 0 || std::stoi(rnStr) == 3)
+    {
+        static_cast<QSlider*>(rotatableWidgets[1])->setValue(std::stoi(sl));
+    }
+    else
+    {
+        static_cast<QSlider*>(rotatableWidgets[1])->setValue(std::stoi(dl));
+    }
 
     rotationNumber = 0;
 
@@ -217,10 +224,10 @@ Dialog::~Dialog()
 
     // Update subwidgets
     st.start_tr();
-    st.upd_value("RotatableWindow", "Bar Value", "Value", std::to_string(static_cast<QProgressBar*>(rotatableWidgets[3])->value()));
-    st.upd_value("RotatableWindow", "Dial Value", "Value", std::to_string(static_cast<QDial*>(rotatableWidgets[2])->value()));
+    st.upd_value("RotatableWindow", "Dial Value", "Value", std::to_string(static_cast<QDial*>(rotatableWidgets[3])->value()));
+    st.upd_value("RotatableWindow", "SpinBox Value", "Value", std::to_string(static_cast<QSpinBox*>(rotatableWidgets[2])->value()));
     st.upd_value("RotatableWindow", "Slider Value", "Value", std::to_string(static_cast<QSlider*>(rotatableWidgets[1])->value()));
-    st.upd_value("RotatableWindow", "SpinBox Value", "Value", std::to_string(static_cast<QSpinBox*>(rotatableWidgets[0])->value()));
+    st.upd_value("RotatableWindow", "Bar Value", "Value", std::to_string(static_cast<QProgressBar*>(rotatableWidgets[0])->value()));
     st.end_tr();
 
     st.upd_value("RotatableWindow", "Rotation Number", "Value", std::to_string(rotationNumber));
