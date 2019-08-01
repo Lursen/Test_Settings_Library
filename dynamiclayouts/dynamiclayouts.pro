@@ -14,14 +14,16 @@ INSTALLS += target
 DISTFILES += \
     CMakeLists.txt
 
-#INCLUDEPATH += $$PWD/settings_library/include
-#DEPENDPATH += $$PWD/settings_library/include
-#LIBS += $$PWD/settings_lib.lib
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -lsettings_lib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -lsettings_libd
+else:unix: LIBS += -L$$PWD/lib/ -lsettings_lib
 
+INCLUDEPATH += $$PWD/lib/settings_library
+DEPENDPATH += $$PWD/lib/settings_library
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/settings_library/ -lsettings_lib
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/settings_library/ -lsettings_libd
-else:unix: LIBS += -L$$PWD/settings_library/ -lsettings_lib
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -lSQLite3
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -lSQLite3d
+else:unix: LIBS += -L$$PWD/lib/ -lSQLite3
 
-INCLUDEPATH += $$PWD/settings_library/include
-DEPENDPATH += $$PWD/settings_library/include
+INCLUDEPATH += $$PWD/lib/settings_library
+DEPENDPATH += $$PWD/lib/settings_library
