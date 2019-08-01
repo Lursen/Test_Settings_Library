@@ -1,0 +1,4 @@
+[submodule "dynamiclayouts/lib/Settings_Library"]
+	path = dynamiclayouts/lib/Settings_Library
+	url = https://github.com/Lursen/Settings_Library
+	branch = master
